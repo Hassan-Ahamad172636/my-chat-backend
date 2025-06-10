@@ -5,13 +5,13 @@ import { initSocket } from "./utils/socket.io.js";
 
 databaseConnection()
   .then(() => {
-    const PORT = process.env.PORT || 5001;
+    // const PORT = process.env.PORT;
 
     const server = http.createServer(app);
 
     const io = initSocket(server);
 
-    server.listen(PORT, () => {
+    server.listen(port, () => {
       console.log(
         `\n==================================\n server is running at port: ${PORT}! \n==================================\n`
       );
