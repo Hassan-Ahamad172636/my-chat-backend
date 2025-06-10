@@ -1,18 +1,25 @@
+import http from "http";
 import { app } from "./app.js";
 import { databaseConnection } from "./database/server.js";
 import { initSocket } from "./utils/socket.io.js";
 
-await databaseConnection();
+databaseConnection()
+  .then(() => {
+    const PORT = process.env.PORT || 5001;
 
-// ye section hata diya (no server.listen)
-// app.js ke andar ye add kar do:
+    const server = http.createServer(app);
 
-app.get("/", (req, res) => {
-  res.json({
-    message: "Server is live! 🚀",
-    status: "success"
+    const io = initSocket(server);
+
+    server.listen(PORT, () => {
+      console.log(
+        `\n==================================\n server is running at port: ${PORT}! \n==================================\n`
+      );
+    });
+  })
+  .catch((err) => {
+    console.log(
+      "\n==================================\n server not start! \n==================================\n"
+    );
+    console.error(err);
   });
-});
-
-
-export default app;
