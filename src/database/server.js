@@ -6,7 +6,7 @@ export const databaseConnection = async () => {
     
     try {
         console.log("2");
-        await mongoose.connect(`${process.env.DATABASE_URL}/${DATABASE_NAME}`);
+        await mongoose.connect(`${process.env.DATABASE_URL}${DATABASE_NAME}`);
         console.log("3");
         console.log('\n==================================\n database connected successfully! \n==================================\n');
         console.log("4");
