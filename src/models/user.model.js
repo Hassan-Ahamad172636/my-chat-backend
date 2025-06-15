@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema(
     profilePhoto: {
       type: String,
     },
+    isFriend: {
+      type: Boolean,
+      default: false
+    },
   },
   { timestamps: true }
 );

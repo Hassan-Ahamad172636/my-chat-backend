@@ -1,7 +1,10 @@
-import { User } from "../models/user.mode.js";
+import { User } from "../models/user.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { apiResponse } from "../utils/generateApiResponse.js";
 import { generateToken } from "../utils/jwt.js";
+import { Conversation } from "../models/conversation.model.js";
+import { Chat } from "../models/chat.model.js";
+
 
 export const userController = {
   // ✅ CREATE user
@@ -109,16 +112,27 @@ export const userController = {
     });
   }),
 
-  // ✅ DELETE user by ID
   delete: asyncHandler(async (req, res) => {
     const { id } = req.params;
 
+    // 1. Delete the user
     const user = await User.findByIdAndDelete(id);
 
     if (!user) {
       return apiResponse(res, 404, false, "User not found!");
     }
 
-    return apiResponse(res, 200, true, "User deleted successfully!");
+    // 2. Delete all conversations where the user is a participant
+    await Conversation.deleteMany({ participants: id });
+
+    // 3. Delete all messages sent by this user
+    await Chat.deleteMany({ sender: id });
+
+    return apiResponse(
+      res,
+      200,
+      true,
+      "User and related data deleted successfully!"
+    );
   }),
 };
