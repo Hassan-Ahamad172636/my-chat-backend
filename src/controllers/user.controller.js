@@ -5,7 +5,6 @@ import { generateToken } from "../utils/jwt.js";
 import { Conversation } from "../models/conversation.model.js";
 import { Chat } from "../models/chat.model.js";
 
-
 export const userController = {
   // ✅ CREATE user
   create: asyncHandler(async (req, res) => {
@@ -92,10 +91,9 @@ export const userController = {
   update: asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { fullName, email, password } = req.body;
-    const profilePhoto = req.file?.path;
+    const profilePhoto = req.file?.path; // multer file path
 
     const user = await User.findById(id);
-
     if (!user) {
       return apiResponse(res, 404, false, "User not found!");
     }
