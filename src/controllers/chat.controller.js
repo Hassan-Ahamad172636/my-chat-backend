@@ -5,7 +5,11 @@ import { getIO } from "../utils/socket.io.js";
 
 export const chatController = {
   create: asyncHandler(async (req, res) => {
+    console.log("Check 1");
+    
     const { conversationId, message } = req.body;
+
+    console.log("Check 2");
     const senderId = req?.user?.id;
 
     if (!conversationId || !message) {
@@ -27,8 +31,13 @@ export const chatController = {
       return apiResponse(res, 400, false, "All fields are required!");
     }
 
+    // ✅ Emit real-time message to all users in the room
     const io = getIO();
     io.to(conversationId).emit("message", chat);
+
+    // ✅ Console log the emitted message
+    console.log("📤 Emitted message to room:", conversationId);
+    console.log("📝 Message data:", chat);
 
     return apiResponse(res, 201, true, "Message sent successfully!", { chat });
   }),

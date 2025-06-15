@@ -1,11 +1,10 @@
+// services/socketService.js
 import { Server } from "socket.io";
 
 let io;
 
 export const initSocket = (server) => {
-  if (io) {
-    return io; // already initialized
-  }
+  if (io) return io; // Already initialized
 
   io = new Server(server, {
     cors: {
@@ -15,32 +14,28 @@ export const initSocket = (server) => {
   });
 
   io.on("connection", (socket) => {
-    console.log(`🟢 New client connected: ${socket.id}`);
+    console.log("✅ New client connected:", socket.id);
 
-    // Join a conversation room
+    // Join Room
     socket.on("joinRoom", (roomId) => {
       socket.join(roomId);
-      console.log(`📥 Socket ${socket.id} joined room: ${roomId}`);
+      console.log(`🔵 User joined room: ${roomId}`);
     });
 
-    // Leave a conversation room
-    socket.on("leaveRoom", (roomId) => {
-      socket.leave(roomId);
-      console.log(`📤 Socket ${socket.id} left room: ${roomId}`);
-    });
+    // Receive Message
+    socket.on("sendMessage", ({ roomId, message, sender }) => {
+      console.log(`📨 Message received in room ${roomId} from ${sender}: ${message}`);
 
-    // Receive message and send it to the room
-    socket.on("message", (data) => {
-      console.log("📨 Message received from client:", data);
-
-      // Emit message to all clients in the room (including sender)
-      io.to(data.conversationId).emit("message", data);
-
-      console.log(`📤 Message broadcasted to room ${data.conversationId}:`, data);
+      // Emit to same room
+      io.to(roomId).emit("receiveMessage", {
+        message,
+        sender,
+        time: new Date().toISOString(),
+      });
     });
 
     socket.on("disconnect", () => {
-      console.log(`🔴 Client disconnected: ${socket.id}`);
+      console.log("❌ Client disconnected:", socket.id);
     });
   });
 
@@ -49,7 +44,7 @@ export const initSocket = (server) => {
 
 export const getIO = () => {
   if (!io) {
-    throw new Error("Socket.io not initialized!");
+    throw new Error("❌ Socket.io not initialized!");
   }
   return io;
 };
