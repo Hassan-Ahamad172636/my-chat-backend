@@ -4,6 +4,9 @@ import { apiResponse } from "../utils/generateApiResponse.js";
 import { generateToken } from "../utils/jwt.js";
 import { Conversation } from "../models/conversation.model.js";
 import { Chat } from "../models/chat.model.js";
+import path from "path";
+import fs from "fs";
+
 
 export const userController = {
   // ✅ CREATE user
