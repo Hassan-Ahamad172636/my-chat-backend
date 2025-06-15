@@ -98,6 +98,14 @@ export const userController = {
       return apiResponse(res, 404, false, "User not found!");
     }
 
+    // ✅ Delete previous photo if exists and new one is uploaded
+    if (profilePhoto && user.profilePhoto) {
+      const oldPath = path.join(process.cwd(), user.profilePhoto); // absolute path
+      if (fs.existsSync(oldPath)) {
+        fs.unlinkSync(oldPath); // delete the file
+      }
+    }
+
     if (fullName) user.fullName = fullName;
     if (email) user.email = email;
     if (password) user.password = password;
