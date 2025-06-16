@@ -7,7 +7,6 @@ import { Chat } from "../models/chat.model.js";
 import path from "path";
 import fs from "fs";
 
-
 export const userController = {
   // ✅ CREATE user
   create: asyncHandler(async (req, res) => {
@@ -94,8 +93,9 @@ export const userController = {
   update: asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { fullName, email, password } = req.body;
-    const profilePhoto = req.file ? req.file.path.replace(/\\/g, "/").replace("public/", "") : null;
-
+    const profilePhoto = req.file
+      ? req.file.path.replace(/\\/g, "/").replace("public/", "")
+      : null;
 
     const user = await User.findById(id);
     if (!user) {
@@ -104,9 +104,9 @@ export const userController = {
 
     // ✅ Delete previous photo if exists and new one is uploaded
     if (profilePhoto && user.profilePhoto) {
-      const oldPath = path.join(process.cwd(), user.profilePhoto); // absolute path
+      const oldPath = path.join(process.cwd(), "public", user.profilePhoto); // corrected absolute path
       if (fs.existsSync(oldPath)) {
-        fs.unlinkSync(oldPath); // delete the file
+        fs.unlinkSync(oldPath); // delete the old file
       }
     }
 
