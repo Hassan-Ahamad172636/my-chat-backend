@@ -94,7 +94,8 @@ export const userController = {
   update: asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { fullName, email, password } = req.body;
-    const profilePhoto = req.file?.path; // multer file path
+    const profilePhoto = req.file ? req.file.path.replace(/\\/g, "/").replace("public/", "") : null;
+
 
     const user = await User.findById(id);
     if (!user) {
