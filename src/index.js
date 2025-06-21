@@ -5,6 +5,10 @@ import serverless from "serverless-http";
 const app = express();
 app.use(express.json());
 
+app.get("/ping", (req, res) => {
+  res.send("pong");
+});
+
 // Use your routes
 app.use("/user", userRoute);
 
