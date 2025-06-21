@@ -1,16 +1,39 @@
-// import express from "express";
-// import { userRoute } from "../src/routes/user.route.js"; // ✅ apna existing route import karo
-// import serverless from "serverless-http";
+// import http from "http";
+// import { app } from "./app.js";
+// import { databaseConnection } from "./database/server.js";
+// import { initSocket } from "./utils/socket.io.js";
 
-// const app = express();
-// app.use(express.json());
+// databaseConnection().then(() => {
+//   const PORT = process.env.PORT || 3001;
 
-app.get("/ping", (req, res) => {
-  res.send("pong");
+//   const server = http.createServer(app);
+
+//   initSocket(server);
+
+//   server.listen(PORT, () => {
+//     console.log(`🚀 Server running on port ${PORT}`);
+//   });
+// });
+
+import express from "express";
+import cors from "cors";
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(cors());
+app.use(express.json());
+
+// ✅ Test route
+app.get("/hello", (req, res) => {
+  res.status(200).json({ message: "Hello Hassan, your server is working! 🚀" });
 });
 
-// // Use your routes
-// app.use("/user", userRoute);
+// ✅ Root route
+app.get("/", (req, res) => {
+  res.send("Welcome to Hassan's Backend API");
+});
 
-// // Export as serverless handler
-// export default serverless(app);
+app.listen(PORT, () => {
+  console.log(`🚀 Server is running on port ${PORT}`);
+});
