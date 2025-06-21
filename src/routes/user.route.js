@@ -10,11 +10,11 @@ userRoute.post("/login", userController.login);
 userRoute.get("/get-all", authMiddleware, userController.getAll);
 userRoute.get("/get-by-id/:id", authMiddleware, userController.getOne);
 userRoute.put(
-    "/update/:id",
-    upload.single("profilePhoto"), // 👈 this must match the field name in FormData
-    authMiddleware,
-    userController.update
-  );
+  "/update/:id",
+  upload.single("profilePhoto"),
+  authMiddleware,
+  userController.update
+);
 userRoute.delete("/delete/:id", authMiddleware, userController.delete);
 
 export { userRoute };
