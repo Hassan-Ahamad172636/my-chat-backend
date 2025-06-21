@@ -67,9 +67,12 @@ export const userController = {
 
   // ✅ GET ALL users
   getAll: asyncHandler(async (req, res) => {
-    const users = await User.find({}).select("-password"); // don't return password
+    const users = await User.find({}).populate({
+      path: 'friends',
+      select: 'fullName profilePhoto'
+    });
 
-    return apiResponse(res, 200, true, "All users fetched successfully!", {
+    return apiResponse(res, 200, true, "All null users fetched successfully!", {
       users,
     });
   }),

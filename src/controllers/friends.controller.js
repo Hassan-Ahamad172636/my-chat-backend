@@ -3,33 +3,37 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 
 const friendsController = {
   addFriend: asyncHandler(async (req, res) => {
-    const { userId } = req.body;
+    const { userId, friends } = req.body;
 
-    if (!userId) {
+    if (!userId || !friends) {
       return res.status(400).json({
         success: false,
-        message: "User ID is required",
+        message: "User ID and Friend ID are required",
       });
     }
 
-    // Find the user and update isFriend to true
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { isFriend: true },
-      { new: true }
-    );
+    const user = await User.findById(userId).populate({
+      path:'friends',
+      select: 'fullName'
+    });
 
-    if (!updatedUser) {
-      return res.status(404).json({
+    // Check if already added
+    const isAlreadyFriend = user.friends.includes(friends);
+
+    if (isAlreadyFriend) {
+      return res.status(400).json({
         success: false,
-        message: "User not found",
+        message: "Friend already added",
       });
     }
 
-    res.status(200).json({
+    user.friends.push(friends);
+    await user.save();
+
+    return res.status(200).json({
       success: true,
-      message: "User marked as friend successfully",
-      user: updatedUser,
+      message: "Friend added!",
+      user,
     });
   }),
 };

@@ -20,10 +20,12 @@ const userSchema = new mongoose.Schema(
     profilePhoto: {
       type: String,
     },
-    isFriend: {
-      type: Boolean,
-      default: false
-    },
+    friends: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'User'
+      }
+    ]
   },
   { timestamps: true }
 );
