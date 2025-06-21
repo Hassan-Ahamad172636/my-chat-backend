@@ -1,4 +1,12 @@
-// api/index.js
-export default function handler(req, res) {
-  res.status(200).send("Welcome to Hassan's API on Vercel!");
-}
+import express from "express";
+import { userRoute } from "../src/routes/user.route.js"; // ✅ apna existing route import karo
+import serverless from "serverless-http";
+
+const app = express();
+app.use(express.json());
+
+// Use your routes
+app.use("/user", userRoute);
+
+// Export as serverless handler
+export default serverless(app);
