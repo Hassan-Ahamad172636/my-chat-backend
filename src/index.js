@@ -5,7 +5,15 @@ import serverless from "serverless-http";
 const app = express();
 
 app.use(express.json());
-app.use("/user", userRoute); // 🔗 now routes like /user/create, /user/login etc.
 
-export const handler = serverless(app); // For Vercel
+// ✅ Debugging Route
+app.get("/", (req, res) => {
+  res.status(200).send("✅ Server is up and running!");
+});
+
+// ✅ All user-related routes
+app.use("/user", userRoute);
+
+// Serverless export for Vercel
+export const handler = serverless(app);
 export default handler;
