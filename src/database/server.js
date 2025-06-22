@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 import { DATABASE_NAME } from "../constants.js";
 
-export const databaseConnection = async () => {
+// src/database/server.js
+export async function databaseConnection() {
   try {
     await mongoose.connect(`${process.env.DATABASE_URL}${DATABASE_NAME}`);
     console.log(
@@ -12,4 +13,4 @@ export const databaseConnection = async () => {
       "\n==================================\n network error! \n==================================\n"
     );
   }
-};
+}
