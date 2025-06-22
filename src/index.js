@@ -1,19 +1,12 @@
-import express from "express";
-import { userRoute } from "./routes/user.route.js";
-import serverless from "serverless-http";
+import { app } from "./app.js";
+import { databaseConnection } from "./database/server.js";
 
-const app = express();
-
-app.use(express.json());
-
-// ✅ Debugging Route
-app.get("/", (req, res) => {
-  res.status(200).send("✅ Server is up and running!");
-});
-
-// ✅ All user-related routes
-app.use("/user", userRoute);
-
-// Serverless export for Vercel
-export const handler = serverless(app);
-export default handler;
+databaseConnection()
+  .then(() => {
+    app.listen(process.env.PORT, () => {
+      console.log("Server is listen on port 3001");
+    });
+  })
+  .catch((error) => {
+    console.log("Network error!");
+  });
