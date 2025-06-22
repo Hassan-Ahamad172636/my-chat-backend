@@ -12,9 +12,13 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.static("public"));
 
-app.use("/user", userRoute)
-app.use("/conversation", conversationRouter)
-app.use("/chat", chatRouter)
-app.use("/friends", friendsRoute)
+app.get("/", (req, res) => {
+  res.send("🎉 Serverless Express is working!");
+});
+
+app.use("/user", userRoute);
+app.use("/conversation", conversationRouter);
+app.use("/chat", chatRouter);
+app.use("/friends", friendsRoute);
 
 export { app };
