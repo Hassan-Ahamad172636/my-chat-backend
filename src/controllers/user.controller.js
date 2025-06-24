@@ -68,8 +68,8 @@ export const userController = {
   // ✅ GET ALL users
   getAll: asyncHandler(async (req, res) => {
     const users = await User.find({}).populate({
-      path: 'friends',
-      select: 'fullName profilePhoto'
+      path: "friends",
+      select: "fullName profilePhoto",
     });
 
     return apiResponse(res, 200, true, "All null users fetched successfully!", {
@@ -81,7 +81,14 @@ export const userController = {
   getOne: asyncHandler(async (req, res) => {
     const { id } = req.params;
 
-    const user = await User.findById(id).select("-password");
+    const user = await User.findById(id)
+      .select("-password")
+      .populate([
+        {
+          path: "friends",
+          select: "fullName profilePhoto",
+        },
+      ]);
 
     if (!user) {
       return apiResponse(res, 404, false, "User not found!");
