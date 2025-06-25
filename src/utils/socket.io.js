@@ -6,7 +6,7 @@ export const initSocket = (server) => {
 
   io = new Server(server, {
     cors: {
-      origin: "*",
+      origin: "https://admin-my-chat-com.vercel.app",
       methods: ["GET", "POST"],
     },
   });
